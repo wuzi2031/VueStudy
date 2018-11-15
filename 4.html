@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <script src="vue.js"></script>
+    <script src="node_modules/axios/dist/axios.js"></script>
+</head>
+<body>
+<div id="d">
+    <table border="1">
+        <tr>
+            <th>序号</th>
+            <th>编号</th>
+            <th>名称</th>
+            <th>性别</th>
+            <th>操作</th>
+        </tr>
+        <!--<tr v-for="v,index in filterNews" :style="{'background-color':index%2==0?'aqua':'aquamarine'}">-->
+        <tr v-for="v,index in filterNews" :style="bk(index)">
+            <td>{{index}}</td>
+            <td v-for="value,key in v ">
+                {{value}}
+            </td>
+            <td @click="td">
+                <a href="http://www.baidu.com" style="color: gray" @click.prevent.stop="del(index)">删除</a>
+            </td>
+        </tr>
+    </table>
+    <input type="radio" v-model="sex" value="boy"> 男</input>
+    <input type="radio" v-model="sex" value="girl"> 女</input>
+    <input type="radio" v-model="sex" value="all"> 全部</input>
+    <input type="button" v-model="sort_seq" @click="sort"/>
+    <br>
+    <textarea v-model="curr_content" style="border: solid greenyellow" rows="3" cols="40"></textarea>
+    <br>
+    <input type="button" @click="st" value="提交"/>
+</div>
+
+</body>
+<script>
+
+    let vm = new Vue({
+        el: '#d',
+        computed: {
+            bk() {
+                return function (index) {
+                    if (index % 2 === 0) {
+                        return {'background-color': 'aqua'}
+                    } else {
+                        return {'background-color': 'aquamarine'}
+                    }
+                }
+            },
+            filterNews() {
+                return this.news.filter(vl => {
+                    if (this.sex === 'all')
+                        return true;
+                    return this.sex === vl.sex
+                })
+            }
+        },
+        methods: {
+            strEmp(str) {
+                if (str === "" || str === null || str === undefined) {
+                    return true
+                }
+            },
+            st() {
+                if (!this.strEmp(this.curr_content)) {
+                    this.news.push({'name': this.curr_content});
+                    this.curr_content = ''
+                }
+            },
+            del(index) {
+                this.news.splice(index, 1)
+            },
+            td() {
+                alert("td")
+            },
+            sort() {
+                this.news.sort((a, b) => {
+                    if (this.sort_seq === '正序') {
+                        return a.id > b.id
+
+                    } else {
+                        return a.id < b.id
+                    }
+                });
+                if (this.sort_seq === '正序') {
+                    this.sort_seq = '反序'
+                } else {
+                    this.sort_seq = '正序'
+                }
+            }
+        },
+        watch: {},
+        data: {
+            sort_seq: '正序',
+            curr_content: '',
+            sex: 'all',
+            news: [
+                {'id': 12, 'name': '小米', 'sex': 'girl'},
+                {'id': 16, 'name': '小红', 'sex': 'girl'},
+                {'id': 20, 'name': '小强', 'sex': 'boy'},
+                {'id': 15, 'name': '小明', 'sex': 'boy'},
+            ]
+        }
+    })
+</script>
+<style>
+    a {
+        color: aqua;
+    }
+
+    b {
+        color: aquamarine;
+    }
+</style>
+</html>

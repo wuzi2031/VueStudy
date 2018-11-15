@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <script src="vue.js"></script>
+    <script src="node_modules/axios/dist/axios.js"></script>
+</head>
+<body>
+<div id="d">
+    <input class="t" v-model="n1" placeholder="1"/>
+    <input class="t" v-model="n2" placeholder="2"/>
+    <p class="t" id="p1">{{sum}}</p>
+    <input type="text" v-model="search"/>
+</div>
+
+</body>
+<script>
+    let data = {
+        msg: 'hello',
+        n1: 1,
+        n2: 2,
+        search: ""
+    }
+    let vm = new Vue({
+        el: '#d',
+        computed: {
+            sum() {
+                return this.n1 * 1 + this.n2 * 1
+            }
+        },
+        watch: {
+            search(curVal, oldVal) {
+                console.log(curVal, oldVal)
+                axios.get('http://47.106.145.133/apk_config/', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': "Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNTM2NzIyMzk0LCJlbWFpbCI6ImFkbWluQHFxLmNvbSJ9.rcnsbM1XuSny8rZ-XyqX288aJM6UBL9qDatajK8Hnp8"
+                    }
+                }).then(function (response) {
+                    const data = response.data;
+                    console.log(data)
+                }).catch(e => {
+                    console.log(e)
+                });
+            }
+        },
+        data: data
+    })
+</script>
+<style>
+    #p1 {
+        color: red;
+        font-size: large;
+    }
+
+    .t {
+        color: red;
+        font-size: large;
+    }
+</style>
+</html>

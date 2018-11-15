@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <script src="vue.js"></script>
+    <script src="node_modules/axios/dist/axios.js"></script>
+</head>
+<body>
+<div id="d">
+    <my_component :ns="news" :tc="'red'"></my_component>
+    <self_component :ns="news" :tc="'blue'"></self_component>
+    <self_component :ns="news" :tc="'yellow'"></self_component>
+</div>
+
+</body>
+<script type="text/x-template" id="all">
+    <div>
+        {{tc}}
+        <li v-for=" v,index in ns" :style="{'color': tc}">
+            {{v.id}}--{{v.name}}--{{v.sex}}
+            <input type="button" value="删除" @click="del(index)"/>
+        </li>
+    </div>
+</script>
+<script type="text/x-template" id="self">
+    <div>
+        {{tt}}
+        <li v-for=" v,index in cns" :style="{'color': tc}">
+            {{v.id}}--{{v.name}}--{{v.sex}}
+            <input type="button" value="删除" @click="del(cns,index)"/>
+        </li>
+    </div>
+</script>
+<script>
+    Vue.component("my_component", {
+        template: '#all',
+        props: ['ns', 'tc'],
+        methods: {
+            del(index) {
+                this.ns.splice(index, 1)
+            }
+        },
+        data() {
+            return {
+                sel: "全局组件"
+            }
+        }
+    });
+    let vm = new Vue({
+        el: '#d',
+        components: {
+            'self_component': {
+                template: '#self',
+                props: ['ns', 'tc'],
+                data() {
+                    return {tt: 'dddddddd', cns: this.ns.concat()}
+                },
+                computed: {},
+                methods: {
+                    del(list, index) {
+                        list.splice(index, 1)
+                    }
+                }
+            }
+        },
+        computed: {},
+        methods: {},
+        watch: {},
+        data: {
+            news: [
+                {'id': 12, 'name': '小米', 'sex': 'girl'},
+                {'id': 16, 'name': '小红', 'sex': 'girl'},
+                {'id': 20, 'name': '小强', 'sex': 'boy'},
+                {'id': 15, 'name': '小明', 'sex': 'boy'},
+            ]
+        }
+    })
+</script>
+<style>
+    a {
+        color: aqua;
+    }
+
+    b {
+        color: aquamarine;
+    }
+</style>
+</html>

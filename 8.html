@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <script src="vue.js"></script>
+    <script src="node_modules/axios/dist/axios.js"></script>
+</head>
+<body>
+<div id="app">
+    <button @click="toshow">点击让子组件显示</button>
+    <children>
+        <span slot="first">【12345】</span>
+        <span slot="second">【67890】</span>
+        <!--上面这行不会显示-->
+    </children>
+</div>
+
+
+</body>
+
+<script>
+    var vm = new Vue({
+        el: '#app',
+        methods: {
+            toshow: function () {
+                this.$children[0].tohidden = true;
+            }
+        },
+        components: {
+            children: {    //这个无返回值，不会继续派发
+                template: "<div v-if='tohidden' @click='tohide'><slot name='first'></slot>这里是子组件<slot name='second'></slot></div>",
+                data: function () {
+                    return {
+                        tohidden: true
+                    }
+                },
+                methods: {
+                    tohide: function () {
+                        this.tohidden = !this.tohidden;
+                    }
+                }
+            }
+        }
+    });
+</script>
+</html>

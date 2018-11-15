@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <script src="vue.js"></script>
+    <script src="node_modules/axios/dist/axios.js"></script>
+</head>
+<body>
+<div id="d">
+    <table border="1">
+        <tr>
+            <th>序号</th>
+            <th>编号</th>
+            <th>名称</th>
+            <th>性别</th>
+        </tr>
+        <!--<tr v-for="v,index in filterNews" :style="{'background-color':index%2==0?'aqua':'aquamarine'}">-->
+        <tr v-for="v,index in filterNews" :style="bk(index)">
+            <td>{{index}}</td>
+            <td v-for="value,key in v ">
+                {{value}}
+            </td>
+        </tr>
+    </table>
+    <input type="radio" v-model="sex" value="boy"> 男</input>
+    <input type="radio" v-model="sex" value="girl"> 女</input>
+    <input type="radio" v-model="sex" value="all"> 全部</input>
+</div>
+
+</body>
+<script>
+
+    let vm = new Vue({
+        el: '#d',
+        computed: {
+            bk() {
+                return function (index) {
+                    if (index % 2 == 0) {
+                        return {'background-color': 'aqua'}
+                    } else {
+                        return {'background-color': 'aquamarine'}
+                    }
+                }
+            },
+            filterNews() {
+                return this.news.filter(vl => {
+                    if (this.sex == 'all')
+                        return true
+                    return this.sex == vl.sex
+                })
+            }
+        },
+        methods: {},
+        watch: {},
+        data: {
+            sex: 'all',
+            news: [
+                {'id': 12, 'name': '小米', 'sex': 'girl'},
+                {'id': 13, 'name': '小红', 'sex': 'girl'},
+                {'id': 14, 'name': '小强', 'sex': 'boy'},
+                {'id': 15, 'name': '小明', 'sex': 'boy'},
+            ]
+        }
+    })
+</script>
+<style>
+    a {
+        color: aqua;
+    }
+
+    b {
+        color: aquamarine;
+    }
+</style>
+</html>

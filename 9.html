@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <script src="vue.js"></script>
+    <script src="vue-router.js"></script>
+    <script src="node_modules/axios/dist/axios.js"></script>
+</head>
+<body>
+<div id="app">
+    <router-link to="/com1/11/hh/.html">go to com1</router-link>
+    <router-link to="/com2">go to com2</router-link>
+    <router-view></router-view>
+</div>
+
+
+</body>
+
+<script>
+    const com1 = {
+        template: "<div>展示com1<br>params:{{$route.params}}<br>value:{{value}}</div>",
+        data() {
+            return {
+                value: this.$route.params
+            }
+        }
+    };
+    const com2 = {
+        template: "<div>展示com2</div>"
+    };
+
+    const routes = [
+        {path: '/com1/:id/hh/:name', component: com1},
+        {path: '/com2', component: com2},
+    ];
+    const router = new VueRouter({routes: routes});
+
+    var vm = new Vue({
+        el: '#app',
+        router: router,
+        methods: {},
+        components: {}
+    });
+</script>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <script src="vue.js"></script>
+    <script src="vuex.js"></script>
+    <script src="node_modules/axios/dist/axios.js"></script>
+</head>
+<body>
+<div id="d">
+    <h4>购物车</h4>
+    <hr>
+    <car_components></car_components>
+    <br>
+    <p>总价：{{total_pri}}</p>
+</div>
+
+
+</body>
+
+<script type="text/x-template" id="car">
+    <div>
+        <table border="1" cellspacing="0">
+            <tr>
+                <th>编号</th>
+                <th>型号</th>
+                <th>单价</th>
+                <th>数量</th>
+                <th>合计</th>
+            </tr>
+            <tr v-for="v in cares">
+                <td v-for=" iv,key in v" v-if="key!='nums'">
+                    {{iv}}
+                </td>
+                <td>
+                    <input v-model.number="v.nums"/>
+                </td>
+                <td>
+                    {{sTotal(v)}}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</script>
+<script>
+    let car_components = {
+        template: '#car',
+        computed: {
+            cares() {
+                return this.$store.state.cars
+            },
+            sTotal() {
+                return v => {
+                    return v.price * v.nums
+                }
+            }
+        },
+        methods: {}
+    };
+    let store = new Vuex.Store({
+        state: {
+            cars: [
+                {'id': 12, 'name': 'iphone', 'price': 100, 'nums': 1},
+                {'id': 16, 'name': 'huawei', 'price': 80, 'nums': 1},
+                {'id': 20, 'name': 'xiaomi', 'price': 10, 'nums': 1},
+                {'id': 15, 'name': 'sanxing', 'price': 80, 'nums': 1},
+            ]
+        },
+        getters: {
+            total(state) {
+                let total_price = 0;
+                state.cars.forEach(v => {
+                    total_price += v.price * v.nums
+                });
+                return total_price;
+            }
+        }
+    });
+    let vm = new Vue({
+        el: '#d',
+        store: store,
+        components: {car_components},
+        computed: {
+            total_pri() {
+                return this.$store.getters.total
+            }
+        },
+        methods: {},
+        watch: {},
+        data: {}
+    })
+</script>
+<style>
+    a {
+        color: aqua;
+    }
+
+    b {
+        color: aquamarine;
+    }
+</style>
+</html>

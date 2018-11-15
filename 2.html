@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <script src="vue.js"></script>
+    <script src="node_modules/axios/dist/axios.js"></script>
+</head>
+<body>
+<div id="d">
+    <li v-for=" v,index in news" :class="index%2==0?'a':'b'">
+        {{index}}--{{v.id}}--{{v.name}}
+    </li>
+</div>
+
+</body>
+<script>
+
+    let vm = new Vue({
+        el: '#d',
+        data: {
+            news: [
+                {'id': 12, 'name': '小米'},
+                {'id': 13, 'name': 'dp760'},
+            ]
+        }
+    })
+</script>
+<style>
+    .a {
+        color: aqua;
+    }
+
+    .b {
+        color: aquamarine;
+    }
+</style>
+</html>

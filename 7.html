@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <script src="vue.js"></script>
+    <script src="node_modules/axios/dist/axios.js"></script>
+</head>
+<body>
+<div id="d">
+    <h4>购物车</h4>
+    <hr>
+    <car_components v-on:total='getTotal'></car_components>
+    <br>
+    <p>总价：{{total_price}}</p>
+</div>
+
+
+</body>
+
+<script type="text/x-template" id="car">
+    <div>
+        <table border="1" cellspacing="0">
+            <tr>
+                <th>编号</th>
+                <th>型号</th>
+                <th>单价</th>
+                <th>数量</th>
+            </tr>
+            <tr v-for="v in cars">
+                <td v-for=" iv,key in v" v-if="key!='nums'">
+                    {{iv}}
+                </td>
+                <td>
+                    <input v-model.number="v.nums"/>
+                </td>
+            </tr>
+        </table>
+        {{confirm}}
+    </div>
+
+</script>
+<script>
+    let car_components = {
+        template: '#car',
+        data() {
+            return {
+                cars: [
+                    {'id': 12, 'name': 'iphone', 'price': 100, 'nums': 1},
+                    {'id': 16, 'name': 'huawei', 'price': 80, 'nums': 1},
+                    {'id': 20, 'name': 'xiaomi', 'price': 10, 'nums': 1},
+                    {'id': 15, 'name': 'sanxing', 'price': 80, 'nums': 1},
+                ]
+            }
+        },
+        computed: {
+            confirm() {
+                let total_price = 0;
+                this.cars.forEach(car => {
+                    total_price += car.price * car.nums
+                });
+
+                this.$emit('total', total_price)
+            }
+        },
+        mounted(){
+
+        },
+        methods: {
+
+        }
+    };
+    let vm = new Vue({
+        el: '#d',
+        components: {car_components},
+        computed: {},
+        methods: {
+            getTotal(tp) {
+                this.total_price = tp;
+            }
+        },
+        watch: {},
+        data: {
+            total_price: 0,
+        }
+    })
+</script>
+<style>
+    a {
+        color: aqua;
+    }
+
+    b {
+        color: aquamarine;
+    }
+</style>
+</html>

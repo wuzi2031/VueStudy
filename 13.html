@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <script src="vue.js"></script>
+    <script src="vue-router.js"></script>
+    <script src="node_modules/axios/dist/axios.js"></script>
+</head>
+<body>
+<div id="app">
+    <router-view class="top"></router-view>
+    <router-view class="left" name="left"></router-view>
+    <router-view class="content" name="content"></router-view>
+</div>
+
+
+</body>
+<script type="text/x-template" id="top">
+    <div>
+        <li v-for="v in news">
+            <input type="button" :value="v.title" @click="go(v.id)"/>
+        </li>
+    </div>
+
+</script>
+<script type="text/x-template" id="left">
+    <div>
+        left
+    </div>
+
+</script>
+<script type="text/x-template" id="content">
+    <div>
+        {{$route.params.id}}
+        <br>
+        <a href="" @click.prevent="goHome">返回首页</a>
+        <br>
+        <a href="" @click.prevent="goBack">返回</a>
+    </div>
+</script>
+<script>
+    const topd = {
+        template: "#top",
+        data() {
+            return {
+                news: [
+                    {id: '1', title: 'python', content: 'django框架'},
+                    {id: '2', title: 'js', content: 'vue框架'},
+                ]
+            }
+        },
+        mounted() {
+
+        },
+        watch: {
+            $route(to, from) {
+                console.log("from:" + from.params);
+                console.log("to:" + to.params);
+            }
+        },
+        methods: {
+            go(cid) {
+                this.$router.push({name: 'content', params: {id: cid}})
+            }
+        }
+    };
+    const left = {
+        template: "#left",
+        data() {
+            return {}
+        },
+    };
+    const content = {
+        template: "#content",
+
+        data() {
+            return {
+                content: ''
+            }
+        },
+        methods: {
+            goHome() {
+                this.$router.push({path: '/'})
+            },
+            goBack() {
+                this.$router.go(-1)
+            }
+        }
+    };
+
+    const routes = [
+        {path: '/', components: {default: topd, left: left, content: content}},
+        {path: '/content/:id', component: content, name: 'content'}
+    ];
+    const router = new VueRouter({routes: routes});
+
+    var vm = new Vue({
+        el: '#app',
+        router: router,
+        methods: {},
+        components: {}
+    });
+</script>
+<style>
+    .top {
+        border: solid;
+        margin-bottom: 10px;
+    }
+
+    .left {
+        float: left;
+        border: solid;
+        width: 30%;
+        height: 90%;
+    }
+
+    .content {
+        float: left;
+        border: solid;
+        width: 65%;
+        height: 60%;
+        margin-left: 10px;
+    }
+</style>
+</html>
